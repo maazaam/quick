@@ -16,7 +16,7 @@ public class BaseManager {
     private static final String DROP2 = "drop table user";
 
     public void create() throws SQLException {
-        try (Connection con = Util.get();
+        try (Connection con = Util.getCon();
                 PreparedStatement ps1 = con.prepareStatement(CREATE1);
                 PreparedStatement ps2 = con.prepareStatement(CREATE2)) {
             ps1.executeUpdate();
@@ -25,7 +25,7 @@ public class BaseManager {
     }
 
     public void insert() throws SQLException {
-        try (Connection con = Util.get();
+        try (Connection con = Util.getCon();
                 PreparedStatement ps1 = con.prepareStatement(INSERT1);
                 PreparedStatement ps2 = con.prepareStatement(INSERT2)) {
             ps1.setString(1, "aaaaa");
@@ -38,7 +38,7 @@ public class BaseManager {
     }
 
     public void drop() throws SQLException {
-        try (Connection con = Util.get();
+        try (Connection con = Util.getCon();
                 PreparedStatement ps1 = con.prepareStatement(DROP1);
                 PreparedStatement ps2 = con.prepareStatement(DROP2)) {
             ps1.executeUpdate();

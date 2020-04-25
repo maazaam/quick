@@ -1,5 +1,6 @@
 package com.maaza.quick.base;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -13,8 +14,10 @@ public class BaseManagerTest {
     private BaseManager baseMgr = new BaseManager();
 
     @Before
-    public void setup() {
-        Util.open();
+    public void setup() throws IOException, SQLException {
+        Util.init();
+        Util.startDB();
+        Util.startCP();
     }
 
     @Test
@@ -25,7 +28,8 @@ public class BaseManagerTest {
     }
 
     @After
-    public void teardown() {
-        Util.close();
+    public void teardown() throws SQLException {
+        Util.stopCP();
+        Util.stopDB();
     }
 }

@@ -2,65 +2,46 @@ package com.maaza.quick.base;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import java.io.IOException;
+import java.sql.SQLException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.maaza.quick.TestUtil;
 import com.maaza.quick.Util;
 
 public class BaseHandlerTest {
 
     @Before
-    public void setup() {
-        Util.start();
-        Util.open();
+    public void setup() throws IOException, SQLException {
+        Util.init();
+        Util.startWS();
+        Util.startDB();
+        Util.startCP();
     }
 
     @Test
-    public void testBaseHandlerSuccess() throws Exception {
-        HttpGet r1 = new HttpGet("http://localhost:8080/quick/base/setup");
-        HttpGet r2 = new HttpGet("http://localhost:8080/quick/base/sample");
-        HttpGet r3 = new HttpGet("http://localhost:8080/quick/base/teardown");
-        try (CloseableHttpClient c = HttpClients.createDefault()) {
-            try (CloseableHttpResponse s = c.execute(r1)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r2)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r3)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-        }
+    public void testBaseHandlerSuccess() throws IOException {
+        assertEquals(200, TestUtil.httpGet("http://localhost:8080/quick/base/setup"));
+        assertEquals(200, TestUtil.httpGet("http://localhost:8080/quick/base/sample"));
+        assertEquals(200, TestUtil.httpGet("http://localhost:8080/quick/base/teardown"));
     }
 
     @Test
-    public void testBaseHandlerFailure() throws Exception {
-        Util.close();
-        HttpGet r1 = new HttpGet("http://localhost:8080/quick/base/setup");
-        HttpGet r2 = new HttpGet("http://localhost:8080/quick/base/sample");
-        HttpGet r3 = new HttpGet("http://localhost:8080/quick/base/teardown");
-        try (CloseableHttpClient c = HttpClients.createDefault()) {
-            try (CloseableHttpResponse s = c.execute(r1)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r2)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r3)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-        }
-        Util.open();
+    public void testBaseHandlerFailure() throws IOException, SQLException {
+        Util.stopCP();
+        assertEquals(500, TestUtil.httpGet("http://localhost:8080/quick/base/setup"));
+        assertEquals(500, TestUtil.httpGet("http://localhost:8080/quick/base/sample"));
+        assertEquals(500, TestUtil.httpGet("http://localhost:8080/quick/base/teardown"));
+        Util.startCP();
     }
 
     @After
-    public void teardown() {
-        Util.close();
-        Util.stop();
+    public void teardown() throws SQLException {
+        Util.stopCP();
+        Util.stopDB();
+        Util.stopWS();
     }
 }

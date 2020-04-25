@@ -18,7 +18,7 @@ public class UserManager {
     private static final String SELECT_ALL = "select id, name, status from user";
 
     public void insert(User user) throws SQLException {
-        try (Connection con = Util.get(); PreparedStatement ps = con.prepareStatement(INSERT)) {
+        try (Connection con = Util.getCon(); PreparedStatement ps = con.prepareStatement(INSERT)) {
             ps.setString(1, user.getName());
             ps.setBoolean(2, user.getStatus());
             ps.executeUpdate();
@@ -26,7 +26,7 @@ public class UserManager {
     }
 
     public void update(User user) throws SQLException {
-        try (Connection con = Util.get(); PreparedStatement ps = con.prepareStatement(UPDATE)) {
+        try (Connection con = Util.getCon(); PreparedStatement ps = con.prepareStatement(UPDATE)) {
             ps.setString(1, user.getName());
             ps.setBoolean(2, user.getStatus());
             ps.setInt(3, user.getId());
@@ -35,7 +35,7 @@ public class UserManager {
     }
 
     public void delete(Integer id) throws SQLException {
-        try (Connection con = Util.get(); PreparedStatement ps = con.prepareStatement(DELETE)) {
+        try (Connection con = Util.getCon(); PreparedStatement ps = con.prepareStatement(DELETE)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         }
@@ -43,7 +43,7 @@ public class UserManager {
 
     public User select(Integer id) throws SQLException {
         User user = null;
-        try (Connection con = Util.get(); PreparedStatement ps = con.prepareStatement(SELECT)) {
+        try (Connection con = Util.getCon(); PreparedStatement ps = con.prepareStatement(SELECT)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -59,7 +59,7 @@ public class UserManager {
 
     public List<User> selectAll() throws SQLException {
         List<User> list = new ArrayList<>();
-        try (Connection con = Util.get(); PreparedStatement ps = con.prepareStatement(SELECT_ALL)) {
+        try (Connection con = Util.getCon(); PreparedStatement ps = con.prepareStatement(SELECT_ALL)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     User user = new User();

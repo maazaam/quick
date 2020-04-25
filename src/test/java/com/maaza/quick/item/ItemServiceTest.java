@@ -5,6 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +21,15 @@ public class ItemServiceTest {
     private ItemService itemSvc = new ItemService();
 
     @Before
-    public void setup() throws Exception {
-        Util.open();
+    public void setup() throws IOException, SQLException {
+        Util.init();
+        Util.startDB();
+        Util.startCP();
         this.baseSvc.setup();
     }
 
     @Test
-    public void testItemService() throws Exception {
+    public void testItemService() throws SQLException {
         Item item = new Item();
         item.setName("aaaaa");
         item.setStatus(true);
@@ -42,8 +47,9 @@ public class ItemServiceTest {
     }
 
     @After
-    public void teardown() throws Exception {
+    public void teardown() throws SQLException {
         this.baseSvc.teardown();
-        Util.close();
+        Util.stopCP();
+        Util.stopDB();
     }
 }

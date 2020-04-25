@@ -1,24 +1,25 @@
 package com.maaza.quick.user;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
 
     private static final UserManager MGR = new UserManager();
 
-    public List<User> list() throws Exception {
+    public List<User> list() throws SQLException {
         return MGR.selectAll();
     }
 
-    public User find(Integer id) throws Exception {
+    public User find(Integer id) throws SQLException {
         return MGR.select(id);
     }
 
-    public void drop(Integer id) throws Exception {
+    public void drop(Integer id) throws SQLException {
         MGR.delete(id);
     }
 
-    public void save(User user) throws Exception {
+    public void save(User user) throws SQLException {
         if (user.getId() != null) {
             MGR.update(user);
         } else {

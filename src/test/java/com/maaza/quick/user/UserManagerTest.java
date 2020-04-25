@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -20,8 +21,10 @@ public class UserManagerTest {
     private UserManager userMgr = new UserManager();
 
     @Before
-    public void setup() throws SQLException {
-        Util.open();
+    public void setup() throws IOException, SQLException {
+        Util.init();
+        Util.startDB();
+        Util.startCP();
         this.baseMgr.create();
     }
 
@@ -46,6 +49,7 @@ public class UserManagerTest {
     @After
     public void teardown() throws SQLException {
         this.baseMgr.drop();
-        Util.close();
+        Util.stopCP();
+        Util.stopDB();
     }
 }

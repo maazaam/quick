@@ -2,104 +2,57 @@ package com.maaza.quick.item;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import java.io.IOException;
+import java.sql.SQLException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.maaza.quick.TestUtil;
 import com.maaza.quick.Util;
 
 public class ItemHandlerTest {
 
     @Before
-    public void setup() throws Exception {
-        Util.start();
-        Util.open();
-        HttpGet r1 = new HttpGet("http://localhost:8080/quick/base/setup");
-        HttpGet r2 = new HttpGet("http://localhost:8080/quick/base/sample");
-        try (CloseableHttpClient c = HttpClients.createDefault()) {
-            try (CloseableHttpResponse s = c.execute(r1)) {
-            }
-            try (CloseableHttpResponse s = c.execute(r2)) {
-            }
-        }
+    public void setup() throws IOException, SQLException {
+        Util.init();
+        Util.startWS();
+        Util.startDB();
+        Util.startCP();
+        TestUtil.httpGet("http://localhost:8080/quick/base/setup");
+        TestUtil.httpGet("http://localhost:8080/quick/base/sample");
     }
 
     @Test
-    public void testItemHandlerSuccess() throws Exception {
-        HttpGet r1 = new HttpGet("http://localhost:8080/quick/item/list");
-        HttpGet r2 = new HttpGet("http://localhost:8080/quick/item/find/1");
-        HttpGet r3 = new HttpGet("http://localhost:8080/quick/item/drop/1");
-        HttpPost r4 = new HttpPost("http://localhost:8080/quick/item/save");
-        r4.setHeader("Content-Type", "application/json");
-        r4.setEntity(new StringEntity("{\"name\":\"aaaaa\",\"status\":true}"));
-        HttpPost r5 = new HttpPost("http://localhost:8080/quick/item/save");
-        r5.setHeader("Content-Type", "application/json");
-        r5.setEntity(new StringEntity("{\"id\":1,\"name\":\"aaaaa\",\"status\":false}"));
-        try (CloseableHttpClient c = HttpClients.createDefault()) {
-            try (CloseableHttpResponse s = c.execute(r1)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r2)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r3)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r4)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r5)) {
-                assertEquals(200, s.getStatusLine().getStatusCode());
-            }
-        }
+    public void testItemHandlerSuccess() throws IOException {
+        assertEquals(200, TestUtil.httpGet("http://localhost:8080/quick/item/list"));
+        assertEquals(200, TestUtil.httpGet("http://localhost:8080/quick/item/find/1"));
+        assertEquals(200, TestUtil.httpGet("http://localhost:8080/quick/item/drop/1"));
+        assertEquals(200, TestUtil.httpPost("http://localhost:8080/quick/item/save",
+                "{\"id\":1,\"name\":\"aaaaa\",\"status\":false}"));
+        assertEquals(200,
+                TestUtil.httpPost("http://localhost:8080/quick/item/save", "{\"name\":\"aaaaa\",\"status\":true}"));
     }
 
     @Test
-    public void testItemHandlerFailure() throws Exception {
-        Util.close();
-        HttpGet r1 = new HttpGet("http://localhost:8080/quick/item/list");
-        HttpGet r2 = new HttpGet("http://localhost:8080/quick/item/find/1");
-        HttpGet r3 = new HttpGet("http://localhost:8080/quick/item/drop/1");
-        HttpPost r4 = new HttpPost("http://localhost:8080/quick/item/save");
-        r4.setHeader("Content-Type", "application/json");
-        r4.setEntity(new StringEntity("{\"name\":\"aaaaa\",\"status\":true}"));
-        HttpPost r5 = new HttpPost("http://localhost:8080/quick/item/save");
-        r5.setHeader("Content-Type", "application/json");
-        r5.setEntity(new StringEntity("{\"id\":1,\"name\":\"aaaaa\",\"status\":false}"));
-        try (CloseableHttpClient c = HttpClients.createDefault()) {
-            try (CloseableHttpResponse s = c.execute(r1)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r2)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r3)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r4)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-            try (CloseableHttpResponse s = c.execute(r5)) {
-                assertEquals(500, s.getStatusLine().getStatusCode());
-            }
-        }
-        Util.open();
+    public void testItemHandlerFailure() throws IOException, SQLException {
+        Util.stopCP();
+        assertEquals(500, TestUtil.httpGet("http://localhost:8080/quick/item/list"));
+        assertEquals(500, TestUtil.httpGet("http://localhost:8080/quick/item/find/1"));
+        assertEquals(500, TestUtil.httpGet("http://localhost:8080/quick/item/drop/1"));
+        assertEquals(500, TestUtil.httpPost("http://localhost:8080/quick/item/save",
+                "{\"id\":1,\"name\":\"aaaaa\",\"status\":false}"));
+        assertEquals(500,
+                TestUtil.httpPost("http://localhost:8080/quick/item/save", "{\"name\":\"aaaaa\",\"status\":true}"));
+        Util.startCP();
     }
 
     @After
-    public void teardown() throws Exception {
-        HttpGet r3 = new HttpGet("http://localhost:8080/quick/base/teardown");
-        try (CloseableHttpClient c = HttpClients.createDefault()) {
-            try (CloseableHttpResponse s = c.execute(r3)) {
-            }
-        }
-        Util.close();
-        Util.stop();
+    public void teardown() throws IOException, SQLException {
+        TestUtil.httpGet("http://localhost:8080/quick/base/teardown");
+        Util.stopCP();
+        Util.stopDB();
+        Util.stopWS();
     }
 }
