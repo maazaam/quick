@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>test - item</title>
+<script src="js/jquery.min.js"></script>
+<script src="js/item.js"></script>
+<link rel="icon" type="image/png" href="image/favicon.png">
+</head>
+<body>
+    <form id="data">
+        <table>
+            <tr>
+                <td>id</td>
+                <td><input name="id" type="text" readonly /></td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td><input name="name" type="text" /></td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td><input name="status" type="text" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button id="save" type="button">save</button></td>
+            </tr>
+        </table>
+    </form>
+    <table id="list">
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>status</td>
+                <td colspan="2"></td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+</html>
