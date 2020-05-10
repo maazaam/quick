@@ -8,7 +8,7 @@ $(function() {
 	function teardownBase() {
 		$.get("/quick/base/teardown");
 	}
-	$("#action").on("click", "#setup", setupBase);
-	$("#action").on("click", "#sample", sampleBase);
-	$("#action").on("click", "#teardown", teardownBase);
+	$("#link").on("click", "#setup", setupBase);
+	$("#link").on("click", "#sample", sampleBase);
+	$("#link").on("click", "#teardown", teardownBase);
 });

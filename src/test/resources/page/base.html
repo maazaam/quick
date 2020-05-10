@@ -2,22 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>test - base</title>
-<script src="js/jquery.min.js"></script>
+<script src="js/jquery.js"></script>
 <script src="js/base.js"></script>
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/base.css">
 <link rel="icon" type="image/png" href="image/favicon.png">
 </head>
 <body>
-    <table id="action">
-        <tr>
-            <td><button id="setup" type="button">setup</button></td>
-        </tr>
-        <tr>
-            <td><button id="sample" type="button">sample</button></td>
-        </tr>
-        <tr>
-            <td><button id="teardown" type="button">teardown</button></td>
-        </tr>
-    </table>
+    <div class="container">
+        <div class="row">
+            <div class="column">header</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div id="link" class="column">
+                <button id="setup" type="button">setup</button>
+                <button id="sample" type="button">sample</button>
+                <button id="teardown" type="button">teardown</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="column">footer</div>
+        </div>
+    </div>
 </body>
 </html>
