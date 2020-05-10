@@ -1,4 +1,9 @@
 $(function() {
+	function showData(data) {
+		$.each(data, function(key, val) {
+			$("#data input[name='" + key + "']").val(val);
+		});
+	}
 	function showList(data) {
 		var html = "";
 		$.each(data, function(key, val) {
@@ -11,11 +16,6 @@ $(function() {
 			html += "</tr>";
 		});
 		$("#list tbody").empty().append(html);
-	}
-	function showData(data) {
-		$.each(data, function(key, val) {
-			$("#data input[name='" + key + "']").val(val);
-		});
 	}
 	function listItem() {
 		$.get("/quick/item/list", showList);
@@ -40,7 +40,7 @@ $(function() {
 	});
 	$("#data").on("click", "#save", function() {
 		var item = {};
-		$.each($("#data").serializeArray(), function(idx, ele) {
+		$.each($("#data form").serializeArray(), function(idx, ele) {
 			if (ele.value) {
 				item[ele.name] = ele.value;
 			}
