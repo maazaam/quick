@@ -1,9 +1,58 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>test - user</title>
+<script src="js/jquery.js"></script>
+<script src="js/user.js"></script>
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/user.css">
+<link rel="icon" type="image/png" href="image/favicon.png">
 </head>
 <body>
-	<p>hello world!</p>
+    <div class="container">
+        <div class="row">
+            <div class="column">header</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div id="data" class="column">
+                <form>
+                    <label for="id">id</label>
+                    <input id="id" name="id" type="text" readonly />
+                    <label for="name">name</label>
+                    <input id="name" name="name" type="text" />
+                    <label for="status">status</label>
+                    <input id="status" name="status" type="text" />
+                    <div>
+                        <button id="save" type="button">save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div id="list" class="column">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>name</th>
+                            <th>status</th>
+                            <th colspan="2"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="column">footer</div>
+        </div>
+    </div>
 </body>
 </html>
